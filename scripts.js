@@ -81,3 +81,49 @@ function fecharModal() {
 function limparDados() {
     document.querySelector("#missions_table tbody").innerHTML = "";
 }
+
+
+
+
+//CADASTRAR MISSÃO
+
+document.getElementById('createMissionForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Evita o comportamento padrão de envio do formulário
+
+    // Obtém os dados do formulário
+    const formData = new FormData(this);
+
+    // Converte os dados para um objeto JSON
+    const jsonData = {};
+    formData.forEach((value, key) => {
+        jsonData[key] = value;
+    });
+
+    console.log(jsonData)
+
+    // Faz a requisição POST para o endpoint desejado
+    fetch('seu_endpoint_aqui', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(jsonData)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Erro ao enviar os dados.');
+        }
+        return response.json();
+    })
+    .then(data => {
+        // Manipule a resposta do servidor, se necessário
+        console.log('Resposta do servidor:', data);
+        // Por exemplo, você pode redirecionar para uma página de confirmação
+        window.location.href = 'pagina_de_confirmacao.html';
+    })
+    .catch(error => {
+        console.error('Erro:', error);
+        // Exibe uma mensagem de erro para o usuário
+        alert('Erro ao conectar ao servidor. Por favor, tente novamente mais tarde.');
+    });
+});

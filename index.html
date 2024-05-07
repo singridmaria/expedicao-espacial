@@ -27,17 +27,17 @@
             <section id="create">
                 <h2>Criar Nova Missão</h2>
                 <form id="createMissionForm" action="#" method="post">
-                    <label for="mission_name">Nome da Missão:</label>
-                    <input type="text" id="mission_name" name="mission_name" required>
+                    <label for="nome_da_missao">Nome da Missão:</label>
+                    <input type="text" id="nome_da_missao" name="nome_da_missao" required>
 
-                    <label for="launch_date">Data de Lançamento:</label>
-                    <input type="date" id="launch_date" name="launch_date" required>
+                    <label for="data da lancamento">Data de Lançamento:</label>
+                    <input type="date" id="data da lancamento" name="data da lancamento" required>
 
-                    <label for="destination">Destino:</label>
-                    <input type="text" id="destination" name="destination" required>
+                    <label for="destino">Destino:</label>
+                    <input type="text" id="destino" name="destino" required>
 
-                    <label for="status">Estado da missão:</label>
-                    <select id="status" name="status" required>
+                    <label for="status_da_missao">Estado da missão:</label>
+                    <select id="status_da_missao" name="status_da_missao" required>
                         <option value="" disabled selected>Selecione o estado da missão</option>
                         <option value="ativo">Ativo</option>
                         <option value="concluido">Concluído</option>
@@ -47,8 +47,8 @@
                     </select>
                     <BR>
                     <BR>
-                    <label for="duration">Duração da missão:</label>
-                    <select id="duration" name="duration" required>
+                    <label for="duracao">Duração da missão:</label>
+                    <select id="duracao" name="duracao" required>
                         <option value="" disabled selected>Selecione a duração da missão</option>
                         <option value="1">1 mês</option>
                         <option value="2">2 meses</option>
@@ -67,9 +67,6 @@
                         <!-- Adicione mais opções conforme necessário -->
                     </select>
                     <BR><BR>
-
-                    <label for="d">Destino:</label>
-                    <input type="text" id="destination" name="destination" required>
 
                     <label for="mission_cost">Custo da Missão:</label>
                     <input type="number" id="mission_cost" name="mission_cost" step="0.01" required>
