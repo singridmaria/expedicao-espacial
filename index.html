@@ -31,7 +31,7 @@
                     <input type="text" id="nome_da_missao" name="nome_da_missao" required>
 
                     <label for="data da lancamento">Data de Lançamento:</label>
-                    <input type="date" id="data da lancamento" name="data da lancamento" required>
+                    <input type="text" id="data da lancamento" name="data da lancamento" required>
 
                     <label for="destino">Destino:</label>
                     <input type="text" id="destino" name="destino" required>
@@ -71,21 +71,13 @@
                     <label for="mission_cost">Custo da Missão:</label>
                     <input type="number" id="mission_cost" name="mission_cost" step="0.01" required>
 
-                    <fieldset id="crewFieldset">
-                        <legend>Tripulação:</legend>
-                        <div id="crewContainer">
-                            <input type="text" class="crewItem" name="crew[]" required>
-                        </div>
-                        <button id="botao2" type="button" onclick="addCrewItem()">Adicionar outro Tripulante</button>
-                    </fieldset>
+                    <label for="tripulacao">Tripulação:</label>
+                    <input type="text" id="tripulacao" name="tripulacao" required>
 
-                    <fieldset id="payloadFieldset">
-                        <legend>Carga Útil:</legend>
-                        <div id="payloadContainer">
-                            <input type="text" class="payloadItem" name="payload[]" required>
-                        </div>
-                        <button id="botao2" type="button" onclick="addPayloadItem()">Adicionar outra Carga Útil</button>
-                    </fieldset>
+                    <label for="cargautil">Carga Útil:</label>
+                    <input type="text" id="cargautil" name="cargautil" required>
+
+                
 
 
 
@@ -93,6 +85,15 @@
 
                     <input type="submit" value="Criar Missão">
                 </form>
+            </section>
+
+            <section id="create">
+                <h2>Criar Nova Missão</h2>
+                <form id="createMissionForm" action="#" method="post">
+                    <!-- ... seus campos de formulário aqui ... -->
+                    <input type="submit" value="Criar Missão">
+                </form>
+                <div id="errorMessage" style="color: red; display: none;"></div>
             </section>
 
             <!--CONSULTAR MISSÕES-->

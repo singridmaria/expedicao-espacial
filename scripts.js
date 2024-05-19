@@ -1,129 +1,93 @@
-//ADICIONAR TRIPULANTES E ADICIONAR 
+// Adicionar event listener para o formulário de criação de missão
+document.getElementById('createMissionForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Evitar o envio padrão do formulário
 
-function addCrewItem() {
-    const crewContainer = document.getElementById("crewContainer");
-    const newInput = document.createElement("input");
-    newInput.type = "text";
-    newInput.className = "crewItem";
-    newInput.name = "crew[]";
-    newInput.required = true;
-    crewContainer.appendChild(newInput);
-}
+    // Capturar os dados do formulário
+    const nome_missao = document.getElementById('nome_da_missao').value;
+    const data_lancamento = document.getElementById('data da lancamento').value;
+    const destino = document.getElementById('destino').value;
+    const estado_missao = document.getElementById('status_da_missao').value;
+    const duracao_missao = document.getElementById('duracao').value;
+    const custo_missao = parseFloat(document.getElementById('mission_cost').value);
 
-function addPayloadItem() {
-    const payloadContainer = document.getElementById("payloadContainer");
-    const newInput = document.createElement("input");
-    newInput.type = "text";
-    newInput.className = "payloadItem";
-    newInput.name = "payload[]";
-    newInput.required = true;
-    payloadContainer.appendChild(newInput);
-}
+    // Capturar dados da tripulação e carga útil
+    const tripulacaoElements = document.getElementsByClassName('crewItem');
+    const tripulacao = Array.from(tripulacaoElements).map(element => element.value).join(', ');
 
+    const cargaUtilElements = document.getElementsByClassName('payloadItem');
+    const carga_util = Array.from(cargaUtilElements).map(element => element.value).join(', ');
 
+    // Criar objeto de missão
+    const missao = {
+        nome_missao: nome_missao,
+        data_lancamento: data_lancamento,
+        destino: destino,
+        estado_missao: estado_missao,
+        tripulacao: tripulacao,
+        carga_util: carga_util,
+        duracao_missao: `${duracao_missao} meses`,
+        custo_missao: custo_missao,
+        status_missao: 'planejado' // ou outro status padrão, se necessário
+    };
 
-
-
-// URL da API
-const apiUrl = 'https://api.example.com/missions';
-
-// Função para preencher a tabela de missões
-function fillMissionsTable(missionsData) {
-    const tbody = document.querySelector("#missions_table tbody");
-    tbody.innerHTML = ""; // Limpa os dados antigos da tabela
-
-    missionsData.forEach(mission => {
-        const row = `<tr>
-                        <td>${mission.nome}</td>
-                        <td>${mission.data_lancamento}</td>
-                        <td>${mission.destino}</td>
-                        <td>${mission.estado_missao}</td>
-                        <td>${mission.duracao_missao}</td>
-                        <td>${mission.destino}</td>
-                        <td>
-                            <button>Editar</button>
-                            <button>Excluir</button>
-                        </td>
-                    </tr>`;
-        tbody.innerHTML += row;
-    });
-}
-
-// Função para fazer a requisição à API e preencher a tabela
-function pesquisarMissao() {
-    const startDate = document.getElementById('start_date').value;
-    const endDate = document.getElementById('end_date').value;
-    const url = `${apiUrl}?start_date=${startDate}&end_date=${endDate}`;
-
-    fetch(url)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Erro ao conectar-se à API');
-            }
-            return response.json();
-        })
+    // Chamar a função para cadastrar a missão
+    cadastrarMissao(missao)
         .then(data => {
-            fillMissionsTable(data); // Preenche a tabela com os dados obtidos
+            console.log('Missão cadastrada com sucesso:', data);
+            document.getElementById('errorMessage').style.display = 'none'; // Esconder mensagem de erro, se visível
+            // Aqui você pode adicionar lógica para atualizar a interface do usuário, se necessário
         })
         .catch(error => {
-            console.error('Erro ao obter dados das missões:', error);
-            // Exibe o modal de erro
-            document.getElementById('error_modal').style.display = 'block';
+            console.error('Erro ao cadastrar missão:', error);
+            document.getElementById('errorMessage').innerText = error.message;
+            document.getElementById('errorMessage').style.display = 'block'; // Mostrar mensagem de erro
         });
-}
-
-// Função para fechar o modal de erro
-function fecharModal() {
-    document.getElementById('error_modal').style.display = 'none';
-}
-
-// Função para limpar os dados da tabela
-function limparDados() {
-    document.querySelector("#missions_table tbody").innerHTML = "";
-}
-
-
-
-
-//CADASTRAR MISSÃO
-
-document.getElementById('createMissionForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Evita o comportamento padrão de envio do formulário
-
-    // Obtém os dados do formulário
-    const formData = new FormData(this);
-
-    // Converte os dados para um objeto JSON
-    const jsonData = {};
-    formData.forEach((value, key) => {
-        jsonData[key] = value;
-    });
-
-    console.log(jsonData)
-
-    // Faz a requisição POST para o endpoint desejado
-    fetch('seu_endpoint_aqui', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(jsonData)
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Erro ao enviar os dados.');
-        }
-        return response.json();
-    })
-    .then(data => {
-        // Manipule a resposta do servidor, se necessário
-        console.log('Resposta do servidor:', data);
-        // Por exemplo, você pode redirecionar para uma página de confirmação
-        window.location.href = 'pagina_de_confirmacao.html';
-    })
-    .catch(error => {
-        console.error('Erro:', error);
-        // Exibe uma mensagem de erro para o usuário
-        alert('Erro ao conectar ao servidor. Por favor, tente novamente mais tarde.');
-    });
 });
+
+// Função para cadastrar uma nova missão
+async function cadastrarMissao(missao) {
+    try {
+        const response = await fetch('http://127.0.0.1:2961/criar', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(missao)
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Missão cadastrada com sucesso:', data);
+            return data;
+        } else {
+            const errorData = await response.json();
+            console.error('Erro ao cadastrar missão:', errorData);
+            throw new Error(errorData.message || 'Erro desconhecido ao cadastrar missão');
+        }
+    } catch (error) {
+        console.error('Erro ao fazer solicitação:', error);
+        throw error;
+    }
+}
+
+// Função para adicionar novo campo de tripulante
+function addCrewItem() {
+    const container = document.getElementById('crewContainer');
+    const newItem = document.createElement('input');
+    newItem.type = 'text';
+    newItem.className = 'crewItem';
+    newItem.name = 'crew[]';
+    newItem.required = true;
+    container.appendChild(newItem);
+}
+
+// Função para adicionar novo campo de carga útil
+function addPayloadItem() {
+    const container = document.getElementById('payloadContainer');
+    const newItem = document.createElement('input');
+    newItem.type = 'text';
+    newItem.className = 'payloadItem';
+    newItem.name = 'payload[]';
+    newItem.required = true;
+    container.appendChild(newItem);
+}
